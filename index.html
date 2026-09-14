@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="kk"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UstaTap.kz — Үйге маман шақыру</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f8fc;color:#10213f}header{background:#081b38;color:#fff;position:sticky;top:0;z-index:5}.wrap{max-width:1100px;margin:auto;padding:0 18px}.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{font-size:25px;font-weight:800}.logo b{color:#ffbf19}.nav a{color:#fff;margin-left:15px;text-decoration:none;font-size:14px}.btn{border:0;border-radius:10px;padding:12px 17px;font-weight:700;cursor:pointer}.yellow{background:#ffbf19;color:#10213f}.dark{background:#0b2447;color:#fff}.white{background:#fff;color:#10213f;border:1px solid #dce3ec}.hero{padding:55px 0;background:linear-gradient(120deg,#edf5ff,#fff)}h1{font-size:44px;line-height:1.05;margin:10px 0}.hero p{font-size:18px;max-width:650px;line-height:1.5}.badge{display:inline-block;background:#fff1bf;border-radius:30px;padding:6px 11px;font-size:12px;font-weight:700}.section{padding:44px 0}.title{text-align:center;font-size:30px;margin:0 0 26px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card{background:#fff;border-radius:15px;padding:21px;box-shadow:0 5px 20px #10213f12}.master-scroll{display:flex;gap:16px;overflow-x:auto;padding:8px 4px 18px}.master-scroll .card{min-width:285px;flex:0 0 285px}.icon{font-size:34px}.muted{color:#68758a;line-height:1.45}.form{max-width:680px;margin:auto}.form input,.form select,.form textarea{width:100%;padding:13px;margin:6px 0;border:1px solid #d8e0ea;border-radius:9px;font-size:15px}.notice{display:none;padding:12px;margin-top:12px;border-radius:9px;background:#e8f8ed;color:#17652f}.modal{display:none;position:fixed;inset:0;background:#071a33aa;z-index:30;overflow:auto;padding:25px}.modalbox{background:#fff;max-width:700px;margin:auto;border-radius:16px;padding:23px;position:relative}.close{position:absolute;right:15px;top:12px;font-size:25px;border:0;background:none}.job-list{display:flex;flex-wrap:wrap;gap:6px}.job-chip{background:#edf5ff;border-radius:20px;padding:6px 9px;font-size:12px}.search{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:18px}footer{background:#081b38;color:#fff;padding:35px 0}.empty{text-align:center;color:#68758a;padding:25px}@media(max-width:750px){.navlinks{display:none}.grid{grid-template-columns:1fr 1fr}h1{font-size:36px}.search{grid-template-columns:1fr}}@media(max-width:480px){.grid{grid-template-columns:1fr}}
+.admin-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}.admin-tab{padding:9px 12px;border:1px solid #d8e0ea;border-radius:9px;background:#fff;cursor:pointer;font-weight:700}.admin-item{background:#f7f9fc;border:1px solid #e2e8f0;border-radius:12px;padding:13px;margin:8px 0}.danger{background:#ffe8e8;color:#9b111e}
+/* Cabinet additions */
+.cabinet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.cabinet-card{padding:16px;border:1px solid #e6e8ef;border-radius:14px;background:#fff}
+.cabinet-card h3{margin:0 0 8px}
+.cabinet-muted{color:#667085;font-size:14px}
+.cabinet-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #eee}
+.cabinet-row:last-child{border-bottom:0}
+.cabinet-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:650px){.cabinet-grid{grid-template-columns:1fr}}
+
+</style>
+<style>
+.favorite-btn{background:#fff;border:1px solid #d8e0ea;color:#10213f}
+.report-btn{background:#fff3f3;color:#9b111e;border:1px solid #f0caca}
+.small-note{font-size:12px;color:#68758a}
+.job-button-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:8px 0 12px}
+.job-choice{border:1px solid #d8e0ea;background:#f7faff;border-radius:12px;padding:12px 10px;cursor:pointer;font-weight:800;text-align:left;transition:.15s}
+.job-choice:hover{transform:translateY(-1px);box-shadow:0 4px 12px #10213f14}
+.job-choice.selected{background:#fff1bf;border-color:#ffbf19}
+.job-choice.disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+@media(max-width:500px){.job-button-list{grid-template-columns:1fr}}
+
+.job-check-label.selected{border-color:#ffbf19;background:#fff8dc}
+.job-check-label input{width:auto}
+.job-check-label.disabled{opacity:.5;cursor:not-allowed}
+.rating-stars{letter-spacing:2px}
+.review-box{margin-top:22px;padding-top:20px;border-top:1px solid #d8e0ea}
+.review-title{font-size:27px;margin:0 0 8px;color:#10213f}
+.review-help{margin:0 0 14px;color:#68758a;line-height:1.45}
+.review-stars{display:flex;gap:6px;margin:8px 0 18px}
+.review-star{border:0;background:transparent;padding:0;cursor:pointer;font-size:42px;line-height:1;color:#c8ced8}
+.review-star.active{color:#ffbf19}
+.review-fields{display:grid;gap:12px}
+.review-fields label{font-weight:800}
+.review-fields input,.review-fields textarea{width:100%;padding:14px 15px;border:1px solid #cfd8e5;border-radius:12px;font-size:16px;margin-top:6px}
+.review-fields textarea{min-height:110px;resize:vertical}
+.review-submit{width:100%;margin-top:14px;font-size:17px;padding:14px 18px}
+.review-list{display:grid;gap:10px;margin-top:16px}
+.review-card{background:#f7f9fc;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
+.review-card-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.review-stars-small{color:#ffbf19;letter-spacing:1px;margin-top:5px}
+.empty-star{color:#c8ced8}
+.review-date{font-size:12px;color:#8893a5}
+.profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 10px}
+.profile-actions .btn{width:100%;text-align:center;text-decoration:none}
+.profile-order-btn{width:100%;margin-bottom:16px}
+@media(max-width:520px){.review-title{font-size:24px}.review-star{font-size:38px}}
+
+.admin-search{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0}
+@media(max-width:600px){.admin-search{grid-template-columns:1fr}}
+.customer-choice{background:#fff;border-radius:18px;padding:20px;margin-top:22px;box-shadow:0 5px 20px #10213f12;max-width:850px}
+.customer-choice h2{margin:0 0 6px;font-size:25px}
+.main-job-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.main-job{border:1px solid #d8e0ea;background:#f7faff;border-radius:14px;padding:14px 10px;cursor:pointer;font-weight:800;font-size:15px;transition:.15s}
+.main-job:hover{transform:translateY(-2px);box-shadow:0 5px 14px #10213f18}
+.main-job .job-icon{font-size:27px;display:block;margin-bottom:5px}
+@media(max-width:650px){.main-job-buttons{grid-template-columns:repeat(2,1fr)}}
+.quick-jobs{margin-top:22px;background:#fff;border:1px solid #dce7f3;border-radius:15px;padding:14px;max-width:760px}
+.quick-jobs b{display:block;margin-bottom:9px}
+.quick-job{display:inline-flex;align-items:center;gap:6px;border:1px solid #d8e0ea;background:#f7faff;border-radius:22px;padding:9px 12px;margin:4px;cursor:pointer;font-weight:700}
+.order-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.customer-note{background:#fff;border:1px dashed #cbd8e8;border-radius:12px;padding:12px;margin-top:14px}
+.step-card{text-align:center}
+.step-card .icon{font-size:32px}
+</style>
+</head><body>
+<header><div class="wrap nav"><div class="logo">🏠 Usta<b>Tap.kz</b></div><div class="navlinks"><a href="#services">Қызметтер</a><a href="#masters">Мамандар</a><a href="#orders">Тапсырыс</a></div><button class="btn yellow" onclick="openModal()">👨‍🔧 Маман болу</button></div></header>
+<section class="hero"><div class="wrap"><span class="badge">📍 Түркістан қаласы</span><h1>Үйіңізге сенімді<br>маман табыңыз</h1><p>Қажет маманды бірден таңдаңыз немесе тапсырыс қалдырыңыз.</p>
+<div class="customer-choice">
+  <h2>Сізге қандай маман керек?</h2>
+  <p class="muted">Төмендегі мамандықты басыңыз — сол мамандар бірден көрсетіледі.</p>
+  <div id="mainJobButtons" class="main-job-buttons">
+  <button class="main-job" onclick="chooseJob('Электрик')"><span class="job-icon">⚡</span>Электрик</button>
+  <button class="main-job" onclick="chooseJob('Сантехник')"><span class="job-icon">🚰</span>Сантехник</button>
+  <button class="main-job" onclick="chooseJob('Слесарь')"><span class="job-icon">🔧</span>Слесарь</button>
+  <button class="main-job" onclick="chooseJob('Газ маманы')"><span class="job-icon">🔥</span>Газ маманы</button>
+  <button class="main-job" onclick="chooseJob('Сварщик')"><span class="job-icon">🔩</span>Сварщик</button>
+  <button class="main-job" onclick="chooseJob('Маляр')"><span class="job-icon">🎨</span>Маляр</button>
+  <button class="main-job" onclick="chooseJob('Бетонщик')"><span class="job-icon">🧱</span>Бетонщик</button>
+  <button class="main-job" onclick="chooseJob('Техника жөндеу')"><span class="job-icon">🧺</span>Техника жөндеу</button>
+  <button class="main-job" onclick="chooseJob('Ұсақ жөндеу')"><span class="job-icon">🛠️</span>Ұсақ жөндеу</button>
+</div>
+</div>
+<a class="btn yellow" href="#orders" style="text-decoration:none;display:inline-block;margin-top:14px">📢 Маман шақыру</a>
+<div class="quick-jobs">
+  <b>Көп ізделетін мамандар:</b>
+  <div id="quickJobs"></div>
+</div></div></section>
+
+<section id="services" class="section"><div class="wrap"><h2 class="title">Қызмет түрлері</h2><div id="servicesGrid" class="grid"></div></div></section>
+<section id="masters" class="section" style="background:#fff"><div class="wrap"><h2 class="title">Мамандар</h2><div class="search"><select id="filterJob" onchange="render()"><option value="">Барлық мамандық</option></select><input id="filterCity" placeholder="Қаланы енгізіңіз" oninput="render()"><button class="btn dark" onclick="render()">🔎 Іздеу</button></div><div id="masterGrid" class="master-scroll"></div></div></section>
+
+<section class="section" id="favorites" style="background:#fff"><div class="wrap">
+<h2 class="title">❤️ Таңдаулы мамандар</h2>
+<div id="favoritesGrid" class="grid"></div>
+</div></section>
+<section id="orders" class="section"><div class="wrap"><h2 class="title">📢 Маман керек пе?</h2><div class="form"><input id="oname" placeholder="Аты-жөніңіз *"><input id="ophone" inputmode="tel" maxlength="12" placeholder="+77001234567" oninput="formatPhone(this)"><select id="ocity"><option value="Түркістан">Түркістан</option></select><select id="odistrict"><option value="">Аудан / мөлтек аудан таңдаңыз</option><option value="Отырар">Отырар</option><option value="Бекзат">Бекзат</option><option value="Шавгар">Шавгар</option><option value="Мкр 1">Мкр 1</option><option value="Мкр 2">Мкр 2</option><option value="Мкр 3">Мкр 3</option><option value="Мкр 4">Мкр 4</option><option value="Мкр 5">Мкр 5</option><option value="Яссы">Яссы</option><option value="Сауран">Сауран</option><option value="Қарашық">Қарашық</option><option value="Қала маңы">Қала маңы</option><option value="Басқа">Басқа</option></select><select id="ojob"><option value="">Қандай маман керек? *</option><option value="Электрик">Электрик</option><option value="Слесарь">Слесарь</option><option value="Сантехник">Сантехник</option><option value="Газ маманы">Газ маманы</option><option value="Сварщик">Сварщик</option><option value="Маляр">Маляр</option><option value="Бетонщик">Бетонщик</option><option value="Техника жөндеу">Техника жөндеу</option><option value="Ұсақ жөндеу">Ұсақ жөндеу</option></select><textarea id="odesc" rows="4" placeholder="Жұмыс сипаттамасы *"></textarea><button class="btn yellow" onclick="createOrder()">📢 Маман шақыру / жариялау</button>
+<div class="customer-note">💡 Тапсырыс жарияланғаннан кейін сәйкес мамандар сізбен телефон арқылы байланыса алады.</div>
+<div id="ordermsg" class="notice"></div></div></div></section>
+<section class="section" style="background:#edf5ff"><div class="wrap"><h2 class="title">📢 Соңғы тапсырыстар</h2><div id="ordersGrid" class="grid"></div></div></section>
+<section class="section" style="background:#fff"><div class="wrap"><h2 class="title">👤 Менің хабарламаларым</h2><div class="form"><input id="myPhone" inputmode="tel" maxlength="12" placeholder="+77001234567" oninput="formatPhone(this)"><button class="btn dark" onclick="showMyOrders()">Көру</button><div id="myOrders"></div></div></div></section><section class="section" style="background:#edf5ff"><div class="wrap">
+<h2 class="title">UstaTap.kz қалай жұмыс істейді?</h2>
+<div class="grid">
+  <div class="card step-card"><div class="icon">1️⃣</div><h3>Маман таңдаңыз</h3><p class="muted">Мамандықты басып, қала бойынша іздеңіз.</p></div>
+  <div class="card step-card"><div class="icon">2️⃣</div><h3>Профильді қараңыз</h3><p class="muted">Тәжірибесі, бағасы, рейтингі мен пікірлерін көріңіз.</p></div>
+  <div class="card step-card"><div class="icon">3️⃣</div><h3>Байланысыңыз</h3><p class="muted">Телефон немесе WhatsApp арқылы келісіңіз.</p></div>
+</div></div></section>
+<section class="section" id="siteRules" style="background:#fff"><div class="wrap">
+<h2 class="title">🛡️ UstaTap.kz ережелері</h2>
+<div class="grid">
+<div class="card"><h3>🔒 Қауіпсіздік</h3><p class="muted">Телефон мен жеке мәліметтерді тек жұмысқа байланысты пайдаланыңыз. Ақша жібермес бұрын маманды тексеріңіз.</p></div>
+<div class="card"><h3>⚠️ Шағым</h3><p class="muted">Спам, алдау немесе күмәнді әрекет байқалса, маман профилінен шағым жіберіңіз.</p></div>
+<div class="card"><h3>✅ Тексерілген маман</h3><p class="muted">Админ құжаттары мен тәжірибесін тексерген маманға арнайы белгі қоя алады.</p></div>
+</div></div></section><footer><div class="wrap"><div class="logo">🏠 Usta<b>Tap.kz</b></div><p>© 2026 UstaTap.kz — Түркістан қаласының шеберлер базасы</p><div style="background:#fff3cd;color:#664d03;padding:10px 18px;text-align:center;font-size:13px"><b>✅ Тексерілген нұсқа:</b> ☁️ Supabase базасына қосылған нұсқа. Мамандар, тапсырыстар, пікірлер және бан тізімі ортақ база арқылы сақталады.</div><button class="btn white" onclick="openAdmin()">🔐 Админ панель</button></div></footer>
+
+<div id="modal" class="modal"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><button class="btn white" style="margin-bottom:10px" onclick="closeModal()">← Артқа</button><h2>👨‍🔧 Маман ретінде тіркелу</h2><p class="muted">Бір маман 1-ден 5-ке дейін мамандық таңдай алады.</p><div class="form"><input id="mname" placeholder="Аты-жөніңіз *"><input id="mphone" inputmode="tel" maxlength="12" placeholder="+77001234567" oninput="formatPhone(this)"><select id="mcity"><option value="Түркістан">Түркістан</option></select><select id="mdistrict"><option value="">Аудан / мөлтек аудан таңдаңыз</option><option value="Отырар">Отырар</option><option value="Бекзат">Бекзат</option><option value="Шавгар">Шавгар</option><option value="Мкр 1">Мкр 1</option><option value="Мкр 2">Мкр 2</option><option value="Мкр 3">Мкр 3</option><option value="Мкр 4">Мкр 4</option><option value="Мкр 5">Мкр 5</option><option value="Яссы">Яссы</option><option value="Сауран">Сауран</option><option value="Қарашық">Қарашық</option><option value="Қала маңы">Қала маңы</option><option value="Басқа">Басқа</option></select><b>🔧 Мамандықты таңдаңыз *</b>
+<div id="jobSelectionInfo" class="small-note" style="margin:6px 0;font-weight:700">Таңдалды: 0/5 (кемінде 1, ең көбі 5)</div>
+<div id="jobChecks" class="job-button-list"><button type="button" class="job-choice" data-job="Электрик" onclick="toggleJobChoice('Электрик')"><span style="font-size:20px">⚡</span> Электрик</button>
+<button type="button" class="job-choice" data-job="Слесарь" onclick="toggleJobChoice('Слесарь')"><span style="font-size:20px">🔧</span> Слесарь</button>
+<button type="button" class="job-choice" data-job="Сантехник" onclick="toggleJobChoice('Сантехник')"><span style="font-size:20px">🚰</span> Сантехник</button>
+<button type="button" class="job-choice" data-job="Газ маманы" onclick="toggleJobChoice('Газ маманы')"><span style="font-size:20px">🔥</span> Газ маманы</button>
+<button type="button" class="job-choice" data-job="Сварщик" onclick="toggleJobChoice('Сварщик')"><span style="font-size:20px">🔩</span> Сварщик</button>
+<button type="button" class="job-choice" data-job="Маляр" onclick="toggleJobChoice('Маляр')"><span style="font-size:20px">🎨</span> Маляр</button>
+<button type="button" class="job-choice" data-job="Бетонщик" onclick="toggleJobChoice('Бетонщик')"><span style="font-size:20px">🧱</span> Бетонщик</button>
+<button type="button" class="job-choice" data-job="Техника жөндеу" onclick="toggleJobChoice('Техника жөндеу')"><span style="font-size:20px">🧺</span> Техника жөндеу</button>
+<button type="button" class="job-choice" data-job="Ұсақ жөндеу" onclick="toggleJobChoice('Ұсақ жөндеу')"><span style="font-size:20px">🛠️</span> Ұсақ жөндеу</button></div><input id="mexp" placeholder="Тәжірибеңіз"><input id="mprice" placeholder="Бағасы"><textarea id="mdesc" rows="3" placeholder="Өзіңіз туралы"></textarea><button class="btn yellow" onclick="registerMaster()">✅ Тіркелу</button><div id="regmsg" class="notice"></div></div></div></div>
+
+<div id="profile" class="modal"><div class="modalbox"><button class="close" onclick="closeProfile()">×</button><button class="btn white" style="margin-bottom:10px" onclick="closeProfile()">← Мамандарға қайту</button><div id="profileContent"></div></div></div>
+<div id="admin" class="modal"><div class="modalbox"><button class="close" onclick="closeAdmin()">×</button><button class="btn white" style="margin-bottom:10px" onclick="closeAdmin()">← Артқа</button><h2>🔐 Админ панель</h2><p class="small-note">Админ кіруі Supabase Auth арқылы қорғалады. Админ әрекеттері тек рұқсат берілген аккаунтқа ашылады.</p><div class="form" id="adminLogin"><input id="alogin" type="email" autocomplete="username" placeholder="Админ email"><input id="apass" type="password" autocomplete="current-password" placeholder="Құпиясөз"><button class="btn yellow" onclick="loginAdmin()">Кіру</button><div id="adminLoginMsg"></div></div><div id="adminPanel" style="display:none"></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const JOBS=["Электрик","Слесарь","Сантехник","Газ маманы","Сварщик","Маляр","Бетонщик","Техника жөндеу","Ұсақ жөндеу"];
+const ICONS={"Электрик":"⚡","Слесарь":"🔧","Сантехник":"🚰","Газ маманы":"🔥","Сварщик":"🔩","Маляр":"🎨","Бетонщик":"🧱","Техника жөндеу":"🧺","Ұсақ жөндеу":"🛠️"};
+const DISTRICTS=["Отырар","Бекзат","Шавгар","Мкр 1","Мкр 2","Мкр 3","Мкр 4","Мкр 5","Яссы","Сауран","Қарашық","Қала маңы","Басқа"];
+
+function getOwnerToken(){
+  let t=localStorage.getItem("ustatap_owner_token");
+  if(!t){
+    t=(crypto.randomUUID?crypto.randomUUID():(Date.now()+"-"+Math.random().toString(36).slice(2)));
+    localStorage.setItem("ustatap_owner_token",t);
+  }
+  return t;
+}
+
+function normalizePhone(v){
+  let d=String(v||"").replace(/\D/g,"");
+  if(d.startsWith("8")) d="7"+d.slice(1);
+  if(!d.startsWith("7")) return "";
+  return "+"+d;
+}
+function validPhone(v){return /^\+7\d{10}$/.test(normalizePhone(v));}
+function formatPhone(el){
+  let d=String(el.value||"").replace(/\D/g,"");
+  if(d.startsWith("8")) d="7"+d.slice(1);
+  if(d.startsWith("7")) d=d.slice(0,11);
+  el.value=d ? "+"+d : "";
+}
+const demo=[
+{id:1,name:"Рамазан Е.",phone:"+77771234567",city:"Түркістан",job:["Электрик","Слесарь"],exp:"8 жыл",price:"5000 ₸ бастап",desc:"Электр және жөндеу жұмыстары",rating:"4.9"},
+{id:2,name:"Бекзат Н.",phone:"+77772345678",city:"Түркістан",job:["Сварщик","Бетонщик"],exp:"6 жыл",price:"5000 ₸ бастап",desc:"Дәнекерлеу және бетон жұмыстары",rating:"4.8"},
+{id:3,name:"Айдос Қ.",phone:"+77773456789",city:"Түркістан",job:["Сантехник","Маляр"],exp:"7 жыл",price:"6000 ₸ бастап",desc:"Сантехника және сырлау",rating:"4.9",verified:true,status:"active"}];
+let masters=readJSON("ustatap_masters",null)||demo;
+masters=masters.map(m=>({...m,verified:!!m.verified,status:m.status||"active"}));
+const $=id=>document.getElementById(id);
+function readJSON(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw)return fallback;
+    const value=JSON.parse(raw);
+    return value ?? fallback;
+  }catch(e){
+    console.warn("UstaTap storage error:",key,e);
+    return fallback;
+  }
+}
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function save(){localStorage.setItem("ustatap_masters",JSON.stringify(masters))}
+
+// ===== UstaTap.kz навигациясы және модаль терезелер =====
+let activeModal="";
+function showModal(id,stateName){
+  ["modal","profile","admin"].forEach(x=>$(x).style.display="none");
+  $(id).style.display="block";
+  activeModal=id;
+  history.pushState({ustatapModal:stateName},"");
+}
+function hideModal(id,fromBack=false){
+  $(id).style.display="none";
+  if(activeModal===id) activeModal="";
+  if(!fromBack) history.back();
+}
+function openModal(){showModal("modal","register")}
+function closeModal(fromBack=false){hideModal("modal",fromBack)}
+function closeProfile(fromBack=false){hideModal("profile",fromBack)}
+function openAdmin(){showModal("admin","admin")}
+function closeAdmin(fromBack=false){hideModal("admin",fromBack)}
+window.addEventListener("popstate",()=>{
+  if(activeModal==="modal") closeModal(true);
+  else if(activeModal==="profile") closeProfile(true);
+  else if(activeModal==="admin") closeAdmin(true);
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if(activeModal==="profile") closeProfile();
+    else if(activeModal==="modal") closeModal();
+    else if(activeModal==="admin") closeAdmin();
+  }
+});
+["modal","profile","admin"].forEach(id=>{
+  $(id).addEventListener("click",e=>{
+    if(e.target.id===id){
+      if(id==="modal") closeModal();
+      if(id==="profile") closeProfile();
+      if(id==="admin") closeAdmin();
+    }
+  });
+});
+
+function registerMaster(){
+  let msg=$("regmsg");
+  let phone=normalizePhone($("mphone").value);
+  let name=$("mname").value.trim();
+  let city=$("mcity").value.trim();
+  let jobs=[...document.querySelectorAll("#jobChecks .job-choice.selected")].map(x=>x.dataset.job);
+  if(!name || !validPhone(phone) || !city || !$("mdistrict").value || !jobs.length || jobs.length>5){
+    msg.style.display="block"; msg.textContent=jobs.length>5?"❗ Бір маман ең көбі 5 мамандық таңдай алады.":"❗ Аты-жөніңізді, телефонды, қаланы және кемінде 1 мамандықты толтырыңыз."; return;
+  }
+  if(banned().some(x=>x.phone===phone)){
+    msg.style.display="block"; msg.textContent="🚫 Бұл нөмір банға жіберілген."; return;
+  }
+  if(masters.some(m=>m.phone===phone)){
+    msg.style.display="block"; msg.textContent="⚠️ Бұл телефон нөмірімен маман тіркелген."; return;
+  }
+  let m={
+    id:Date.now(), name, phone, city:city+" / "+$("mdistrict").value, job:jobs,
+    exp:$("mexp").value.trim()||"Көрсетілмеген",
+    price:$("mprice").value.trim()||"Келісім бойынша",
+    desc:$("mdesc").value.trim()||"Маман қызметі",
+    rating:"Жаңа", verified:false, status:"pending"
+  };
+  masters.push(m); save(); render();
+  msg.style.display="block"; msg.textContent="✅ Өтінім қабылданды! Админ тексергеннен кейін профиль сайтта жарияланады.";
+  $("mname").value=""; $("mphone").value=""; $("mexp").value=""; $("mprice").value=""; $("mdesc").value="";
+  renderJobChecks();
+}
+
+function init(){
+ $("servicesGrid").innerHTML=JOBS.map(j=>`<div class="card"><div class="icon">${ICONS[j]}</div><h3>${j}</h3><p class="muted">Осы қызмет бойынша маманды табыңыз.</p><button class="btn dark" onclick="chooseJob('${j}')">Маман табу</button></div>`).join("");
+ JOBS.forEach(j=>{
+   if(!$("filterJob").querySelector(`option[value="${CSS.escape(j)}"]`))
+     $("filterJob").insertAdjacentHTML("beforeend",`<option value="${esc(j)}">${esc(j)}</option>`);
+ });
+ if($("ojob").options.length===1){
+   JOBS.forEach(j=>$("ojob").insertAdjacentHTML("beforeend",`<option value="${esc(j)}">${esc(j)}</option>`));
+ }
+ renderJobChecks();
+ render();renderOrders();renderFavorites();renderQuickJobs();
+}
+function renderJobChecks(){
+  updateJobSelection();
+}
+function toggleJobChoice(job){
+  const selected=[...document.querySelectorAll("#jobChecks .job-choice.selected")].map(x=>x.dataset.job);
+  const exists=selected.includes(job);
+  if(exists){
+    selected.splice(selected.indexOf(job),1);
+  }else{
+    if(selected.length>=5){
+      alert("❗ Бір маман ең көбі 5 мамандық таңдай алады.");
+      return;
+    }
+    selected.push(job);
+  }
+  document.querySelectorAll("#jobChecks .job-choice").forEach(btn=>{
+    btn.classList.toggle("selected",selected.includes(btn.dataset.job));
+  });
+  updateJobSelection();
+}
+function updateJobSelection(){
+  const buttons=[...document.querySelectorAll("#jobChecks .job-choice")];
+  const selected=buttons.filter(x=>x.classList.contains("selected")).length;
+  const info=$("jobSelectionInfo");
+  if(info) info.textContent=`Таңдалды: ${selected}/5 (кемінде 1, ең көбі 5)`;
+  buttons.forEach(btn=>{
+    btn.classList.toggle("disabled",!btn.classList.contains("selected") && selected>=5);
+  });
+}
+function chooseJob(j){$("filterJob").value=j;$("masters").scrollIntoView({behavior:"smooth"});render()}
+function requestFromMaster(j){$("ojob").value=j;$("orders").scrollIntoView({behavior:"smooth"});$("odesc").focus()}
+function renderQuickJobs(){
+  let top=["Сантехник","Электрик","Слесарь","Газ маманы","Сварщик","Техника жөндеу"];
+  $("quickJobs").innerHTML=top.map(j=>`<button class="quick-job" onclick="chooseJob('${j}')">${ICONS[j]} ${j}</button>`).join("");
+
+}
+function masterAverage(m){
+  let reviews=readJSON("ustatap_reviews",[]).filter(r=>r.masterId===m.id);
+  return reviews.length?(reviews.reduce((s,r)=>s+Number(r.rating||0),0)/reviews.length).toFixed(1):(m.rating||"Жаңа");
+}
+function render(){
+  let job=$("filterJob").value,city=$("filterCity").value.trim().toLowerCase(),
+      list=masters.filter(m=>m.status==="active"&&m.verified&&(!job||m.job.includes(job))&&(!city||m.city.toLowerCase().includes(city))),
+      g=$("masterGrid"), fav=readJSON("ustatap_favorites",[]);
+  g.innerHTML=list.length?list.map(m=>{
+    let i=masters.indexOf(m), isFav=fav.includes(m.id);
+    return `<div class="card">
+      <div><span class="badge">⭐ ${esc(masterAverage(m))}</span>
+      <h3>${esc(m.name)} ${m.verified?'<span class="badge">✅ Тексерілген</span>':''}</h3><div class="job-list">${m.job.map(j=>`<span class="job-chip">${esc(j)}</span>`).join("")}</div>
+      <p class="muted">📍 ${esc(m.city)}<br>Тәжірибе: ${esc(m.exp)}<br>Бағасы: ${esc(m.price)}</p></div>
+      <div><a class="btn dark" style="display:block;text-align:center;text-decoration:none" href="tel:${esc(m.phone)}">📞 Қоңырау</a>
+      <button class="btn yellow" style="width:100%;margin-top:7px" onclick="profile(${i})">👤 Профиль</button>
+      <button class="btn favorite-btn" style="width:100%;margin-top:7px" onclick="toggleFavorite(${m.id})">${isFav?"❤️ Таңдаулыдан алу":"🤍 Таңдаулыға қосу"}</button>
+      <button class="btn white" style="width:100%;margin-top:7px" onclick="requestFromMaster('${esc(m.job[0])}')">📢 Осы маманға тапсырыс беру</button>
+       <button class="btn report-btn" style="width:100%;margin-top:7px" onclick="reportMaster(${m.id})">⚠️ Шағым/спам</button></div>
+    </div>`
+  }).join(""):'<div class="empty">Бұл іздеу бойынша әзірге маман жоқ.</div>';
+  renderFavorites();
+}function profile(i){
+  let m=masters[i]; if(!m||m.status!=="active"||!m.verified){alert("Бұл маман әзірге жарияланбаған.");return;} let reviews=readJSON("ustatap_reviews",[]).filter(r=>r.masterId===m.id);
+  let avg=reviews.length?(reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1):(m.rating||"Жаңа");
+  $("profileContent").innerHTML=`<span class="badge">⭐ ${esc(avg)}</span><h2>👤 ${esc(m.name)}</h2>
+  <p><b>Мамандықтары:</b> ${m.job.map(esc).join(" • ")}</p><p><b>Қала:</b> ${esc(m.city)}</p>
+  <p><b>Тәжірибе:</b> ${esc(m.exp)}</p><p><b>Бағасы:</b> ${esc(m.price)}</p><p>${esc(m.desc)}</p>
+  <a class="btn dark" href="tel:${esc(m.phone)}">📞 Қоңырау</a>
+  <a class="btn white" target="_blank" href="https://wa.me/${m.phone.replace(/\D/g,'')}">💬 WhatsApp</a>
+  <button class="btn yellow" onclick="requestFromMaster('${esc(m.job[0])}');closeProfile()">📢 Осы маманға тапсырыс беру</button>
+  <hr><h3>⭐ Баға беру</h3><select id="reviewRating"><option value="5">5 — Өте жақсы</option><option value="4">4 — Жақсы</option><option value="3">3 — Орташа</option><option value="2">2 — Нашар</option><option value="1">1 — Өте нашар</option></select>
+  <input id="reviewName" placeholder="Атыңыз"><textarea id="reviewText" rows="2" placeholder="Пікіріңіз"></textarea>
+  <button class="btn yellow" onclick="addReview(${m.id})">Пікір қалдыру</button>
+  <div id="reviewList">${reviews.length?reviews.slice().reverse().map(r=>`<div class="admin-item"><b>${esc(r.name||"Клиент")}</b> — ⭐ ${r.rating}<br>${esc(r.text)}</div>`).join(""):'<p class="small-note">Әзірге пікір жоқ.</p>'}</div>`;
+  showModal("profile","profile");
+}function createOrder(){
+ let msg=$("ordermsg");let phone=normalizePhone($("ophone").value);let b=banned();if(b.some(x=>x.phone===phone)){msg.style.display="block";msg.textContent="🚫 Бұл нөмір банға жіберілген.";return}let missing=[];
+ if(!$("oname").value.trim())missing.push("аты-жөніңіз");
+ if(!validPhone(phone))missing.push("телефон нөмірі");
+ if(!$("odistrict").value)missing.push("аудан / мөлтек аудан");
+ if(!$("ojob").value)missing.push("қандай маман керек");
+ if(!$("odesc").value.trim())missing.push("жұмыс сипаттамасы");
+ if(missing.length){msg.style.display="block";msg.textContent="❗ Мынаны толтырыңыз: "+missing.join(", ")+".";return}
+ let a=readJSON("ustatap_orders",[]);a.push({id:Date.now(),owner:getOwnerToken(),name:$("oname").value.trim(),phone,city:$("ocity").value+" / "+$("odistrict").value,job:$("ojob").value,desc:$("odesc").value.trim(),created:new Date().toLocaleString("kk-KZ"),status:"active"});localStorage.setItem("ustatap_orders",JSON.stringify(a));renderOrders();msg.style.display="block";msg.textContent="✅ Тапсырыс жарияланды!";$("oname").value="";$("ophone").value="";$("odistrict").value="";$("ojob").value="";$("odesc").value=""
+}
+function renderOrders(){let a=readJSON("ustatap_orders",[]).filter(o=>o.status!=="deleted");$("ordersGrid").innerHTML=a.length?a.slice().reverse().map(o=>`<div class="card"><span class="badge">📢 ${esc(o.job)}</span><h3>📍 ${esc(o.city)}</h3><p class="muted">${esc(o.desc)}</p>
+<div class="small-note">🕒 ${esc(o.created||"")}</div>
+<div class="order-actions"><a class="btn dark" href="tel:${esc(o.phone)}" style="text-align:center;text-decoration:none">📞 Клиентке қоңырау</a></div></div>`).join(""):'<div class="empty">Әзірге тапсырыстар жоқ.</div>'}
+async function loginAdmin(){
+  const email=$("alogin").value.trim();
+  const password=$("apass").value;
+  const msg=$("adminLoginMsg");
+  if(!email||!password){msg.innerHTML='<p style="color:#a00">Email мен құпиясөзді енгізіңіз.</p>';return}
+  msg.innerHTML='<p class="small-note">⏳ Тексерілуде...</p>';
+  const {data,error}=await ustadb.auth.signInWithPassword({email,password});
+  if(error){msg.innerHTML='<p style="color:#a00">Кіру қатесі: '+esc(error.message)+'</p>';return}
+  const {data:check,error:checkError}=await ustadb.rpc("is_admin");
+  if(checkError||check!==true){
+    await ustadb.auth.signOut();
+    msg.innerHTML='<p style="color:#a00">Бұл аккаунтқа админ рұқсаты берілмеген.</p>';
+    return;
+  }
+  try{await refreshBanned();}catch(e){console.error(e)}
+  $("adminLogin").style.display="none";
+  $("adminPanel").style.display="block";
+  renderAdmin();
+  msg.innerHTML="";
+}
+async function logoutAdmin(){
+  await ustadb.auth.signOut();
+  dbBanned=[];
+  $("adminPanel").style.display="none";
+  $("adminLogin").style.display="block";
+  $("apass").value="";
+}
+function orders(){return readJSON("ustatap_orders",[])}
+function saveOrders(a){localStorage.setItem("ustatap_orders",JSON.stringify(a))}
+function banned(){return readJSON("ustatap_banned",[])}
+function saveBanned(a){localStorage.setItem("ustatap_banned",JSON.stringify(a))}
+function renderAdmin(){let a=orders().filter(o=>o.status!=="deleted"),b=banned();$("adminPanel").innerHTML=`<div class="admin-tabs"><button class="admin-tab" onclick="adminSection('stats')">📊 Шолу</button><button class="admin-tab" onclick="adminSection('orders')">📢 Хабарламалар</button><button class="admin-tab" onclick="adminSection('masters')">👨‍🔧 Мамандар</button><button class="admin-tab" onclick="adminSection('verify')">✅ Тексеру</button><button class="admin-tab" onclick="adminSection('users')">👤 Клиенттер</button><button class="admin-tab" onclick="adminSection('banned')">🚫 Бан</button><button class="admin-tab" onclick="adminSection('reports')">⚠️ Шағымдар</button><button class="admin-tab danger" onclick="logoutAdmin()">Шығу</button></div><div id="adminContent"></div>`;adminSection("stats")}
+function adminSection(t){
+  let a=orders().filter(o=>o.status!=="deleted"),b=banned(),c=$("adminContent");
+if(t==="stats")c.innerHTML=`<div class="grid"><div class="card"><h3>👨‍🔧 Мамандар</h3><b>${masters.length}</b></div><div class="card"><h3>📢 Тапсырыстар</h3><b>${a.length}</b></div><div class="card"><h3>🚫 Бан</h3><b>${b.length}</b></div></div>`;
+if(t==="orders")c.innerHTML=`<h3>📢 Клиент хабарламалары</h3>${a.length?a.map(o=>`<div class="admin-item"><b>${esc(o.name)}</b> — ${esc(o.phone)}<br>📍 ${esc(o.city)} · ${esc(o.job)}<br>${esc(o.desc)}<br><small>${esc(o.created||"")} · Статус: ${esc(o.status||"active")}</small><br><button class="btn yellow" onclick="adminSetOrderStatus(${o.id})">🔄 Статусты өзгерту</button> <button class="btn danger" onclick="adminDeleteOrder(${o.id})">🗑️ Өшіру</button> <button class="btn white" onclick="banUser('${esc(o.phone)}','Клиент')">🚫 Бан</button></div>`).join(""):'<div class="empty">Хабарлама жоқ.</div>'}`;
+if(t==="masters")c.innerHTML=`<h3>👨‍🔧 Мамандар</h3>${masters.length?masters.map((m,i)=>`<div class="admin-item"><b>${esc(m.name)}</b> — ${esc(m.phone)}<br>${m.job.map(esc).join(", ")} · ${esc(m.city)}<br><button class="btn danger" onclick="adminDeleteMaster(${i})">🗑️ Өшіру</button> <button class="btn white" onclick="banUser('${esc(m.phone)}','Маман')">🚫 Бан</button></div>`).join(""):'<div class="empty">Маман жоқ.</div>'}`;
+if(t==="verify")c.innerHTML=`<h3>✅ Мамандарды тексеру</h3>${masters.length?masters.map((m,i)=>`<div class="admin-item"><b>${esc(m.name)}</b> — ${m.job.map(esc).join(", ")}<br><small>${m.verified?"✅ Тексерілген":"⏳ Тексерілмеген"} · Статус: ${m.status==="blocked"?"🚫 blocked":(m.status==="pending"?"⏳ Күтуде":"🟢 active")}</small><br><button class="btn yellow" onclick="toggleVerified(${i})">${m.verified?"Белгіні алып тастау":"✅ Тексерілген деп жариялау"}</button> <button class="btn white" onclick="toggleMasterStatus(${i})">${m.status==="blocked"?"♻️ Қайта қосу":"🚫 Уақытша бұғаттау"}</button></div>`).join(""):'<div class="empty">Маман жоқ.</div>'}`;
+if(t==="users"){let u=[...new Map(a.map(o=>[o.phone,{name:o.name,phone:o.phone}])).values()];c.innerHTML=`<h3>👤 Клиенттер</h3>${u.length?u.map(x=>`<div class="admin-item"><b>${esc(x.name)}</b> — ${esc(x.phone)}<br><button class="btn white" onclick="banUser('${esc(x.phone)}','Клиент')">🚫 Бан</button></div>`).join(""):'<div class="empty">Клиент жоқ.</div>'}`}
+if(t==="banned")c.innerHTML=`<h3>🚫 Бан тізімі</h3>${b.length?b.map((x,i)=>`<div class="admin-item"><b>${esc(x.phone)}</b> — ${esc(x.type)}<br><small>${esc(x.reason||"Админ шешімі")}</small><br><button class="btn white" onclick="unbanUser(${i})">♻️ Баннан шығару</button></div>`).join(""):'<div class="empty">Бан тізімі бос.</div>'}`}
+if(t==="reports"){let r=readJSON("ustatap_reports",[]);c.innerHTML=`<h3>⚠️ Шағымдар / Спам</h3>${r.length?r.slice().reverse().map((x,i)=>`<div class="admin-item"><b>${esc(x.name)}</b> — ${esc(x.phone)}<br>Себеп: ${esc(x.reason)}<br><small>${esc(x.date||"")}</small><br><button class="btn danger" onclick="adminBanReport(\'${esc(x.phone)}\',\'${esc(x.name)}\')">🚫 Банға жіберу</button> <button class="btn white" onclick="deleteReport(${r.length-1-i})">🗑️ Өшіру</button></div>`).join(""):'<div class="empty">Шағым жоқ.</div>'}`}
+
+
+function adminSetOrderStatus(id){
+  let a=orders(),o=a.find(x=>x.id===id);if(!o)return;
+  let s=prompt("Статус: active / in_progress / completed",o.status||"active");
+  if(!s||!["active","in_progress","completed"].includes(s))return;
+  o.status=s;saveOrders(a);renderOrders();renderAdmin()
+}
+function adminDeleteOrder(id){if(confirm("Хабарламаны өшіру керек пе?")){saveOrders(orders().filter(o=>o.id!==id));renderOrders();renderAdmin()}}
+function adminDeleteMaster(i){if(confirm("Маманды өшіру керек пе?")){masters.splice(i,1);save();render();renderAdmin()}}
+function banUser(phone,type){let b=banned();if(!b.some(x=>x.phone===phone))b.push({phone,type,reason:"Админ шешімі",date:new Date().toLocaleString("kk-KZ")});saveBanned(b);alert("🚫 Банға жіберілді");renderAdmin()}
+function unbanUser(i){let b=banned();b.splice(i,1);saveBanned(b);renderAdmin()}
+
+function adminBanReport(phone,name){banUser(phone,"Шағым бойынша");alert("🚫 "+name+" банға жіберілді.");}
+function deleteReport(i){let a=readJSON("ustatap_reports",[]);a.splice(i,1);localStorage.setItem("ustatap_reports",JSON.stringify(a));adminSection("reports")}
+
+function toggleVerified(i){if(!masters[i])return;masters[i].verified=!masters[i].verified;masters[i].status=masters[i].verified?"active":"pending";save();render();renderAdmin()}
+function toggleMasterStatus(i){
+  masters[i].status=masters[i].status==="blocked"?"active":"blocked";save();render();renderAdmin()
+}
+function showMyOrders(){let p=normalizePhone($("myPhone").value),a=orders().filter(o=>o.phone===p&&o.status!=="deleted"&&(!o.owner||o.owner===getOwnerToken()));$("myOrders").innerHTML=a.length?a.map(o=>`<div class="admin-item"><b>${esc(o.job)}</b> · ${esc(o.city)}<p>${esc(o.desc)}</p><button class="btn danger" onclick="clientDeleteOrder(${o.id})">🗑️ Өз хабарламамды өшіру</button></div>`).join(""):'<div class="empty">Бұл нөмірмен хабарлама табылмады.</div>'}
+function clientDeleteOrder(id){let o=orders().find(x=>x.id===id);if(!o||o.owner&&o.owner!==getOwnerToken()){alert("Бұл хабарламаны өшіруге рұқсат жоқ.");return}if(confirm("Өз хабарламаңызды өшіру керек пе?")){saveOrders(orders().filter(o=>o.id!==id));renderOrders();showMyOrders()}}
+function renderFavorites(){
+  let ids=readJSON("ustatap_favorites",[]),
+      list=ids.map(id=>masters.find(m=>m.id===id)).filter(m=>m&&m.status==="active"&&m.verified), g=$("favoritesGrid");
+  if(!g)return;
+  g.innerHTML=list.length?list.map(m=>`<div class="card"><span class="badge">⭐ ${esc(masterAverage(m))}</span><h3>${esc(m.name)}</h3>
+  <p class="muted">${m.job.map(esc).join(" • ")}<br>📍 ${esc(m.city)}<br>${esc(m.price)}</p>
+  <button class="btn yellow" onclick="profile(${masters.indexOf(m)})">👤 Профиль</button>
+  <button class="btn favorite-btn" onclick="toggleFavorite(${m.id})">❤️ Алып тастау</button></div>`).join(""):'<div class="empty">Әзірге таңдаулы маман жоқ.</div>'
+}
+function toggleFavorite(id){
+  let a=readJSON("ustatap_favorites",[]);
+  a=a.includes(id)?a.filter(x=>x!==id):[...a,id];
+  localStorage.setItem("ustatap_favorites",JSON.stringify(a));render()
+}
+function addReview(masterId){
+  let name=$("reviewName").value.trim(),text=$("reviewText").value.trim(),rating=Number($("reviewRating").value);
+  if(!name||!text){alert("Атыңыз бен пікіріңізді толтырыңыз.");return}
+  let a=readJSON("ustatap_reviews",[]);
+  a.push({id:Date.now(),masterId,name,text,rating,date:new Date().toLocaleString("kk-KZ")});
+  localStorage.setItem("ustatap_reviews",JSON.stringify(a));profile(masters.findIndex(m=>m.id===masterId))
+}
+function reportMaster(id){
+  let m=masters.find(x=>x.id===id); if(!m)return;
+  let reason=prompt("Шағым себебін жазыңыз:");
+  if(!reason)return;
+  let a=readJSON("ustatap_reports",[]);
+  a.push({id:Date.now(),target:"master",targetId:id,phone:m.phone,name:m.name,reason,date:new Date().toLocaleString("kk-KZ")});
+  localStorage.setItem("ustatap_reports",JSON.stringify(a));
+  alert("✅ Шағым админге жіберілді.");
+}
+init();
+
+/* ===== UstaTap.kz useful additions: client/specialist cabinet ===== */
+function getCabinetOrders(){
+  try { return JSON.parse(localStorage.getItem('orders') || '[]'); } catch(e){ return []; }
+}
+function openCabinet(){
+  const body = document.getElementById('cabinetBody');
+  if(!body) return;
+  const masters = (() => { try{return JSON.parse(localStorage.getItem('masters')||'[]')}catch(e){return[]} })();
+  const orders = getCabinetOrders();
+  const ownerToken = localStorage.getItem('ownerToken') || '';
+  const myOrders = ownerToken ? orders.filter(o => o.ownerToken === ownerToken) : [];
+  const phone = localStorage.getItem('userPhone') || '';
+
+  const verified = masters.filter(m => m.verified).length;
+  body.innerHTML = `
+    <div class="cabinet-grid">
+      <div class="cabinet-card">
+        <h3>📋 Менің тапсырыстарым</h3>
+        <div class="cabinet-muted">Өзіңіз жариялаған тапсырыстарды осы жерден бақылаңыз.</div>
+        <div class="cabinet-row"><span>Барлығы</span><b>${myOrders.length}</b></div>
+        <div class="cabinet-row"><span>Белсенді</span><b>${myOrders.filter(o=>o.status!=='done' && o.status!=='cancelled').length}</b></div>
+        <div class="cabinet-actions">
+          <button class="btn btn-primary" onclick="closeModal('cabinetModal'); document.getElementById('orders')?.scrollIntoView({behavior:'smooth'})">Тапсырыстарға өту</button>
+        </div>
+      </div>
+      <div class="cabinet-card">
+        <h3>⭐ Таңдаулылар</h3>
+        <div class="cabinet-muted">Ұнаған мамандарды жоғалтпай сақтаңыз.</div>
+        <div class="cabinet-row"><span>Расталған мамандар</span><b>${verified}</b></div>
+        <div class="cabinet-actions">
+          <button class="btn btn-primary" onclick="closeModal('cabinetModal'); document.getElementById('masters')?.scrollIntoView({behavior:'smooth'})">Мамандарды көру</button>
+        </div>
+      </div>
+    </div>
+    <div class="cabinet-card" style="margin-top:12px">
+      <h3>👷 Маман ретінде</h3>
+      <div class="cabinet-muted">Маман болсаңыз, профильді тіркеу және кейін әкімші растауын күтуге болады.</div>
+      <div class="cabinet-actions">
+        <button class="btn btn-primary" onclick="closeModal('cabinetModal');openMasterModal()">Маман ретінде тіркелу</button>
+      </div>
+    </div>
+    ${phone ? `<div class="cabinet-muted" style="margin-top:10px">Телефон: ${escapeHtml(phone)}</div>` : ''}
+  `;
+  openModal('cabinetModal');
+}
+function escapeHtml(v){
+  return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+</script>
+<script>
+/* ===== UstaTap.kz — Supabase connection layer ===== */
+const USTATAP_SUPABASE_URL = "https://verjsxvowfoeszfudves.supabase.co";
+const USTATAP_SUPABASE_KEY = "sb_publishable_Zy3z2KUZV6uEXrqgSk2tlg_pyED_EF9";
+const ustadb = window.supabase.createClient(USTATAP_SUPABASE_URL, USTATAP_SUPABASE_KEY);
+
+let dbOrders = [];
+let dbReviews = [];
+let dbBanned = [];
+
+function splitCityDistrict(display, fallbackDistrict=""){
+  const parts = String(display || "").split(" / ");
+  return {
+    city: (parts[0] || "Түркістан").trim(),
+    district: (parts[1] || fallbackDistrict || "").trim()
+  };
+}
+
+function mapMasterRow(r){
+  return {
+    id:r.id,
+    name:r.name || "",
+    phone:r.phone || "",
+    city:(r.city || "Түркістан") + (r.district ? " / " + r.district : ""),
+    district:r.district || "",
+    job:Array.isArray(r.jobs) ? r.jobs : [],
+    exp:r.experience || "Көрсетілмеген",
+    price:r.price || "Келісім бойынша",
+    desc:r.about || "Маман қызметі",
+    rating:"Жаңа",
+    verified:!!r.verified,
+    status:r.blocked ? "blocked" : (r.verified ? "active" : "pending"),
+    blocked:!!r.blocked,
+    created_at:r.created_at
+  };
+}
+
+function mapOrderRow(r){
+  return {
+    id:r.id,
+    owner:r.owner_token || "",
+    name:r.name || "",
+    phone:r.phone || "",
+    city:(r.city || "Түркістан") + (r.district ? " / " + r.district : ""),
+    district:r.district || "",
+    job:r.job || "",
+    desc:r.description || "",
+    budget:r.budget || "",
+    preferred_date:r.preferred_date || "",
+    created:r.created_at ? new Date(r.created_at).toLocaleString("kk-KZ") : "",
+    created_at:r.created_at,
+    status:r.status || "new"
+  };
+}
+
+function mapReviewRow(r){
+  return {
+    id:r.id,
+    masterId:r.master_id,
+    name:r.author_name || "Клиент",
+    rating:Number(r.rating || 0),
+    text:r.comment || "",
+    date:r.created_at ? new Date(r.created_at).toLocaleString("kk-KZ") : ""
+  };
+}
+
+function banned(){ return dbBanned; }
+function orders(){ return dbOrders; }
+
+async function refreshMasters(){
+  const {data,error}=await ustadb.from("masters").select("*").order("created_at",{ascending:false});
+  if(error) throw error;
+  masters=(data||[]).map(mapMasterRow);
+}
+async function refreshOrders(){
+  const {data,error}=await ustadb.from("orders").select("*").order("created_at",{ascending:false});
+  if(error) throw error;
+  dbOrders=(data||[]).map(mapOrderRow);
+}
+async function refreshReviews(){
+  const {data,error}=await ustadb.from("reviews").select("*").order("created_at",{ascending:false});
+  if(error) throw error;
+  dbReviews=(data||[]).map(mapReviewRow);
+}
+async function refreshBanned(){
+  const {data:{user}}=await ustadb.auth.getUser();
+  if(!user){dbBanned=[];return}
+  const {data:isAdmin,error:adminError}=await ustadb.rpc("is_admin");
+  if(adminError||isAdmin!==true){dbBanned=[];return}
+  const {data,error}=await ustadb.from("banned_users").select("*").order("created_at",{ascending:false});
+  if(error) throw error;
+  dbBanned=(data||[]).map(x=>({
+    id:x.id,
+    phone:x.phone || "",
+    type:x.type || x.user_type || "",
+    reason:x.reason || "Админ шешімі",
+    date:x.created_at ? new Date(x.created_at).toLocaleString("kk-KZ") : ""
+  }));
+}
+
+async function loadSupabaseData(){
+  try{
+    await Promise.all([refreshMasters(),refreshOrders(),refreshReviews()]);
+    render();
+    renderOrders();
+    renderFavorites();
+    const {data:{user}}=await ustadb.auth.getUser();
+    if(user){
+      const {data:isAdmin}=await ustadb.rpc("is_admin");
+      if(isAdmin===true){
+        await refreshBanned();
+      }
+    }
+    if($("adminPanel") && $("adminPanel").style.display!=="none") renderAdmin();
+    console.log("UstaTap.kz: Supabase connected");
+  }catch(err){
+    console.error("Supabase load error:",err);
+    const g=$("masterGrid");
+    if(g) g.innerHTML='<div class="empty">⚠️ Supabase деректерін жүктеу мүмкін болмады. RLS/Policy баптауларын тексеріңіз.</div>';
+  }
+}
+
+function masterAverage(m){
+  const list=dbReviews.filter(r=>String(r.masterId)===String(m.id));
+  return list.length ? (list.reduce((s,r)=>s+Number(r.rating||0),0)/list.length).toFixed(1) : (m.rating||"Жаңа");
+}
+
+function render(){
+  const job=$("filterJob").value;
+  const city=$("filterCity").value.trim().toLowerCase();
+  const list=masters.filter(m=>m.status==="active" && m.verified &&
+    (!job || m.job.includes(job)) &&
+    (!city || m.city.toLowerCase().includes(city)));
+  const g=$("masterGrid");
+  const fav=readJSON("ustatap_favorites",[]);
+  g.innerHTML=list.length ? list.map(m=>{
+    const i=masters.indexOf(m), isFav=fav.map(String).includes(String(m.id));
+    return `<div class="card">
+      <div><span class="badge">⭐ ${esc(masterAverage(m))}</span>
+      <h3>${esc(m.name)} ${m.verified?'<span class="badge">✅ Тексерілген</span>':''}</h3>
+      <div class="job-list">${m.job.map(j=>`<span class="job-chip">${esc(j)}</span>`).join("")}</div>
+      <p class="muted">📍 ${esc(m.city)}<br>Тәжірибе: ${esc(m.exp)}<br>Бағасы: ${esc(m.price)}</p></div>
+      <div>
+      <a class="btn dark" style="display:block;text-align:center;text-decoration:none" href="tel:${esc(m.phone)}">📞 Қоңырау</a>
+      <button class="btn yellow" style="width:100%;margin-top:7px" onclick="profile(${i})">👤 Профиль</button>
+      <button class="btn favorite-btn" style="width:100%;margin-top:7px" onclick='toggleFavorite(${JSON.stringify(String(m.id))})'>${isFav?"❤️ Таңдаулыдан алу":"🤍 Таңдаулыға қосу"}</button>
+      <button class="btn white" style="width:100%;margin-top:7px" onclick='requestFromMaster(${JSON.stringify(m.job[0]||"")})'>📢 Осы маманға тапсырыс беру</button>
+      <button class="btn report-btn" style="width:100%;margin-top:7px" onclick='reportMaster(${JSON.stringify(String(m.id))})'>⚠️ Шағым/спам</button>
+      </div></div>`;
+  }).join("") : '<div class="empty">Бұл іздеу бойынша әзірге маман жоқ.</div>';
+  renderFavorites();
+}
+
+function renderFavorites(){
+  const ids=readJSON("ustatap_favorites",[]).map(String);
+  const list=ids.map(id=>masters.find(m=>String(m.id)===id)).filter(m=>m&&m.status==="active"&&m.verified);
+  const g=$("favoritesGrid");
+  if(!g)return;
+  g.innerHTML=list.length ? list.map(m=>`<div class="card">
+    <span class="badge">⭐ ${esc(masterAverage(m))}</span><h3>${esc(m.name)}</h3>
+    <p class="muted">${m.job.map(esc).join(" • ")}<br>📍 ${esc(m.city)}<br>${esc(m.price)}</p>
+    <button class="btn yellow" onclick="profile(${masters.indexOf(m)})">👤 Профиль</button>
+    <button class="btn favorite-btn" onclick='toggleFavorite(${JSON.stringify(String(m.id))})'>❤️ Алып тастау</button>
+  </div>`).join("") : '<div class="empty">Әзірге таңдаулы маман жоқ.</div>';
+}
+
+function toggleFavorite(id){
+  let a=readJSON("ustatap_favorites",[]).map(String);
+  id=String(id);
+  a=a.includes(id)?a.filter(x=>x!==id):[...a,id];
+  localStorage.setItem("ustatap_favorites",JSON.stringify(a));
+  render();
+}
+
+async function registerMaster(){
+  const msg=$("regmsg");
+  const phone=normalizePhone($("mphone").value);
+  const name=$("mname").value.trim();
+  const city=$("mcity").value.trim();
+  const district=$("mdistrict").value;
+  const jobs=[...document.querySelectorAll("#jobChecks .job-choice.selected")].map(x=>x.dataset.job);
+
+  if(!name || !validPhone(phone) || !city || !district || !jobs.length || jobs.length>5){
+    msg.style.display="block";
+    msg.textContent=jobs.length>5
+      ?"❗ Бір маман ең көбі 5 мамандық таңдай алады."
+      :"❗ Аты-жөніңізді, телефонды, ауданды және кемінде 1 мамандықты толтырыңыз.";
+    return;
+  }
+
+  const {data:isBanned,error:banError}=await ustadb.rpc("is_phone_banned",{p_phone:phone});
+  if(banError){console.error(banError)}
+  if(isBanned===true){
+    msg.style.display="block"; msg.textContent="🚫 Бұл нөмір банға жіберілген."; return;
+  }
+  if(masters.some(m=>m.phone===phone)){
+    msg.style.display="block"; msg.textContent="⚠️ Бұл телефон нөмірімен маман тіркелген."; return;
+  }
+
+  msg.style.display="block"; msg.textContent="⏳ Өтінім жіберілуде...";
+  const payload={
+    name, phone, city, district, jobs,
+    experience:$("mexp").value.trim()||"Көрсетілмеген",
+    price:$("mprice").value.trim()||"Келісім бойынша",
+    about:$("mdesc").value.trim()||"Маман қызметі",
+    verified:false, blocked:false
+  };
+  const {error}=await ustadb.from("masters").insert(payload);
+  if(error){
+    console.error(error);
+    msg.textContent="❌ Тіркеу қатесі: "+error.message;
+    return;
+  }
+  await refreshMasters();
+  render();
+  msg.textContent="✅ Өтінім қабылданды! Админ тексергеннен кейін профиль сайтта жарияланады.";
+  $("mname").value=""; $("mphone").value=""; $("mdistrict").value="";
+  $("mexp").value=""; $("mprice").value=""; $("mdesc").value="";
+  document.querySelectorAll("#jobChecks .job-choice").forEach(b=>b.classList.remove("selected"));
+  updateJobSelection();
+}
+
+async function createOrder(){
+  const msg=$("ordermsg");
+  const phone=normalizePhone($("ophone").value);
+  const missing=[];
+  const {data:isBanned,error:banError}=await ustadb.rpc("is_phone_banned",{p_phone:phone});
+  if(banError){console.error(banError)}
+  if(isBanned===true){msg.style.display="block";msg.textContent="🚫 Бұл нөмір банға жіберілген.";return}
+  if(!$("oname").value.trim())missing.push("аты-жөніңіз");
+  if(!validPhone(phone))missing.push("телефон нөмірі");
+  if(!$("odistrict").value)missing.push("аудан / мөлтек аудан");
+  if(!$("ojob").value)missing.push("қандай маман керек");
+  if(!$("odesc").value.trim())missing.push("жұмыс сипаттамасы");
+  if(missing.length){msg.style.display="block";msg.textContent="❗ Мынаны толтырыңыз: "+missing.join(", ")+".";return}
+
+  msg.style.display="block";msg.textContent="⏳ Тапсырыс жариялануда...";
+  const payload={
+    name:$("oname").value.trim(),
+    phone,
+    city:$("ocity").value,
+    district:$("odistrict").value,
+    job:$("ojob").value,
+    description:$("odesc").value.trim(),
+    status:"new",
+    owner_token:getOwnerToken()
+  };
+  const {error}=await ustadb.from("orders").insert(payload);
+  if(error){console.error(error);msg.textContent="❌ Тапсырыс қатесі: "+error.message;return}
+  await refreshOrders();
+  renderOrders();
+  msg.textContent="✅ Тапсырыс жарияланды!";
+  $("oname").value=""; $("ophone").value=""; $("odistrict").value=""; $("ojob").value=""; $("odesc").value="";
+}
+
+function renderOrders(){
+  const a=dbOrders.filter(o=>o.status!=="deleted");
+  $("ordersGrid").innerHTML=a.length ? a.map(o=>`<div class="card">
+    <span class="badge">📢 ${esc(o.job)}</span><h3>📍 ${esc(o.city)}</h3>
+    <p class="muted">${esc(o.desc)}</p><div class="small-note">🕒 ${esc(o.created||"")}</div>
+    <div class="order-actions"><a class="btn dark" href="tel:${esc(o.phone)}" style="text-align:center;text-decoration:none">📞 Клиентке қоңырау</a></div>
+  </div>`).join("") : '<div class="empty">Әзірге тапсырыстар жоқ.</div>';
+}
+
+let selectedReviewRating = 5;
+function setReviewRating(rating){
+  selectedReviewRating=Math.max(1,Math.min(5,Number(rating)||5));
+  document.querySelectorAll("#reviewStars .review-star").forEach((btn,idx)=>{
+    btn.classList.toggle("active",idx<selectedReviewRating);
+    btn.setAttribute("aria-pressed",idx<selectedReviewRating?"true":"false");
+  });
+  const hidden=document.getElementById("reviewRating");
+  if(hidden) hidden.value=String(selectedReviewRating);
+}
+
+async function profile(i){
+  const m=masters[i];
+  if(!m||m.status!=="active"||!m.verified){alert("Бұл маман әзірге жарияланбаған.");return}
+  const reviews=dbReviews.filter(r=>String(r.masterId)===String(m.id));
+  const avg=reviews.length?(reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1):(m.rating||"Жаңа");
+  selectedReviewRating=5;
+
+  $("profileContent").innerHTML=`
+    <span class="badge">⭐ ${esc(avg)}${reviews.length?` (${reviews.length} пікір)`:''}</span>
+    <h2 style="margin-bottom:14px">👤 ${esc(m.name)}</h2>
+    <p><b>Мамандықтары:</b> ${m.job.map(esc).join(" • ")}</p>
+    <p><b>Қала:</b> ${esc(m.city)}</p>
+    <p><b>Тәжірибе:</b> ${esc(m.exp)}</p>
+    <p><b>Бағасы:</b> ${esc(m.price)}</p>
+    <p><b>Өзі туралы:</b> ${esc(m.desc)}</p>
+
+    <div class="profile-actions">
+      <a class="btn dark" href="tel:${esc(m.phone)}">📞 Қоңырау шалу</a>
+      <a class="btn white" target="_blank" href="https://wa.me/${m.phone.replace(/\D/g,'')}">💬 WhatsApp</a>
+    </div>
+    <button class="btn yellow profile-order-btn" onclick='requestFromMaster(${JSON.stringify(m.job[0]||"")});closeProfile()'>📢 Осы маманға тапсырыс беру</button>
+
+    <div class="review-box">
+      <h3 class="review-title">⭐ Баға беру</h3>
+      <p class="review-help">Жұмыс сапасына баға беріп, пікіріңізді жазыңыз.</p>
+
+      <b>Жұлдызшамен бағалаңыз:</b>
+      <div id="reviewStars" class="review-stars">
+        ${[1,2,3,4,5].map(n=>`<button type="button" class="review-star active" aria-label="${n} жұлдыз" aria-pressed="true" onclick="setReviewRating(${n})">★</button>`).join("")}
+      </div>
+      <input type="hidden" id="reviewRating" value="5">
+
+      <div class="review-fields">
+        <label>Атыңыз
+          <input id="reviewName" placeholder="Атыңызды жазыңыз">
+        </label>
+        <label>Пікіріңіз
+          <textarea id="reviewText" placeholder="Пікіріңізді жазыңыз..."></textarea>
+        </label>
+      </div>
+
+      <button class="btn yellow review-submit" onclick='addReview(${JSON.stringify(String(m.id))})'>✈️ Пікір қалдыру</button>
+
+      <div id="reviewList" class="review-list">
+        ${reviews.length?reviews.map(r=>{
+          const rating=Math.max(0,Math.min(5,Number(r.rating)||0));
+          return `<div class="review-card">
+            <div class="review-card-head">
+              <b>${esc(r.name||"Клиент")}</b>
+              <span class="review-date">${esc(r.date||"")}</span>
+            </div>
+            <div class="review-stars-small">${"★".repeat(rating)}<span class="empty-star">${"★".repeat(5-rating)}</span> <b>${rating}</b></div>
+            <div style="margin-top:6px">${esc(r.text)}</div>
+          </div>`;
+        }).join(""):'<p class="small-note">Әзірге пікір жоқ.</p>'}
+      </div>
+    </div>`;
+
+  showModal("profile","profile");
+}
+async function addReview(masterId){
+  const name=$("reviewName").value.trim();
+  const text=$("reviewText").value.trim();
+  const rating=Number(selectedReviewRating||5);
+  if(!name||!text){alert("Атыңыз бен пікіріңізді толтырыңыз.");return}
+  const {error}=await ustadb.from("reviews").insert({
+    master_id:masterId, author_name:name, rating, comment:text
+  });
+  if(error){alert("❌ Пікір сақталмады: "+error.message);return}
+  await refreshReviews();
+  const idx=masters.findIndex(m=>String(m.id)===String(masterId));
+  if(idx>=0) profile(idx);
+}
+function reportMaster(id){
+  const m=masters.find(x=>String(x.id)===String(id)); if(!m)return;
+  const reason=prompt("Шағым себебін жазыңыз:"); if(!reason)return;
+  let a=readJSON("ustatap_reports",[]);
+  a.push({id:Date.now(),target:"master",targetId:id,phone:m.phone,name:m.name,reason,date:new Date().toLocaleString("kk-KZ")});
+  localStorage.setItem("ustatap_reports",JSON.stringify(a));
+  alert("✅ Шағым админге жіберілді.");
+}
+
+function showMyOrders(){
+  const p=normalizePhone($("myPhone").value), owner=getOwnerToken();
+  const a=dbOrders.filter(o=>o.phone===p && o.status!=="deleted" && (!o.owner||o.owner===owner));
+  $("myOrders").innerHTML=a.length ? a.map(o=>`<div class="admin-item"><b>${esc(o.job)}</b> · ${esc(o.city)}
+  <p>${esc(o.desc)}</p><button class="btn danger" onclick='clientDeleteOrder(${JSON.stringify(String(o.id))})'>🗑️ Өз хабарламамды өшіру</button></div>`).join("")
+  :'<div class="empty">Бұл нөмірмен хабарлама табылмады.</div>';
+}
+
+async function clientDeleteOrder(id){
+  const o=dbOrders.find(x=>String(x.id)===String(id));
+  if(!o || (o.owner&&o.owner!==getOwnerToken())){alert("Бұл хабарламаны өшіруге рұқсат жоқ.");return}
+  if(!confirm("Өз хабарламаңызды өшіру керек пе?")) return;
+  const {data,error}=await ustadb.rpc("delete_own_order",{
+    p_order_id:id,
+    p_owner_token:getOwnerToken()
+  });
+  if(error){alert("❌ Өшіру қатесі: "+error.message);return}
+  if(data!==true){alert("Бұл хабарламаны өшіруге рұқсат жоқ.");return}
+  await refreshOrders(); renderOrders(); showMyOrders();
+}
+
+function renderAdmin(){
+  const a=dbOrders.filter(o=>o.status!=="deleted"), b=dbBanned;
+  $("adminPanel").innerHTML=`<div class="admin-tabs">
+    <button class="admin-tab" onclick="adminSection('stats')">📊 Шолу</button>
+    <button class="admin-tab" onclick="adminSection('orders')">📢 Хабарламалар</button>
+    <button class="admin-tab" onclick="adminSection('masters')">👨‍🔧 Мамандар</button>
+    <button class="admin-tab" onclick="adminSection('verify')">✅ Тексеру</button>
+    <button class="admin-tab" onclick="adminSection('users')">👤 Клиенттер</button>
+    <button class="admin-tab" onclick="adminSection('banned')">🚫 Бан</button>
+    <button class="admin-tab" onclick="adminSection('reports')">⚠️ Шағымдар</button>
+    <button class="admin-tab danger" onclick="logoutAdmin()">Шығу</button>
+  </div><div id="adminContent"></div>`;
+  adminSection("stats");
+}
+
+function adminSection(t){
+  const a=dbOrders.filter(o=>o.status!=="deleted"), b=dbBanned, c=$("adminContent");
+  if(t==="stats") c.innerHTML=`<div class="grid"><div class="card"><h3>👨‍🔧 Мамандар</h3><b>${masters.length}</b></div><div class="card"><h3>📢 Тапсырыстар</h3><b>${a.length}</b></div><div class="card"><h3>🚫 Бан</h3><b>${b.length}</b></div></div>`;
+  if(t==="orders") c.innerHTML=`<h3>📢 Клиент хабарламалары</h3>${a.length?a.map(o=>`<div class="admin-item"><b>${esc(o.name)}</b> — ${esc(o.phone)}<br>📍 ${esc(o.city)} · ${esc(o.job)}<br>${esc(o.desc)}<br><small>${esc(o.created||"")} · Статус: ${esc(o.status||"new")}</small><br><button class="btn yellow" onclick='adminSetOrderStatus(${JSON.stringify(String(o.id))})'>🔄 Статусты өзгерту</button> <button class="btn danger" onclick='adminDeleteOrder(${JSON.stringify(String(o.id))})'>🗑️ Өшіру</button> <button class="btn white" onclick='banUser(${JSON.stringify(o.phone)},"Клиент")'>🚫 Бан</button></div>`).join(""):'<div class="empty">Хабарлама жоқ.</div>'}`;
+  if(t==="masters") c.innerHTML=`<h3>👨‍🔧 Мамандар</h3>${masters.length?masters.map((m,i)=>`<div class="admin-item"><b>${esc(m.name)}</b> — ${esc(m.phone)}<br>${m.job.map(esc).join(", ")} · ${esc(m.city)}<br><button class="btn danger" onclick="adminDeleteMaster(${i})">🗑️ Өшіру</button> <button class="btn white" onclick='banUser(${JSON.stringify(m.phone)},"Маман")'>🚫 Бан</button></div>`).join(""):'<div class="empty">Маман жоқ.</div>'}`;
+  if(t==="verify") c.innerHTML=`<h3>✅ Мамандарды тексеру</h3>${masters.length?masters.map((m,i)=>`<div class="admin-item"><b>${esc(m.name)}</b> — ${m.job.map(esc).join(", ")}<br><small>${m.verified?"✅ Тексерілген":"⏳ Тексерілмеген"} · Статус: ${m.status==="blocked"?"🚫 blocked":(m.status==="pending"?"⏳ Күтуде":"🟢 active")}</small><br><button class="btn yellow" onclick="toggleVerified(${i})">${m.verified?"Белгіні алып тастау":"✅ Тексерілген деп жариялау"}</button> <button class="btn white" onclick="toggleMasterStatus(${i})">${m.status==="blocked"?"♻️ Қайта қосу":"🚫 Уақытша бұғаттау"}</button></div>`).join(""):'<div class="empty">Маман жоқ.</div>'}`;
+  if(t==="users"){const u=[...new Map(a.map(o=>[o.phone,{name:o.name,phone:o.phone}])).values()];c.innerHTML=`<h3>👤 Клиенттер</h3>${u.length?u.map(x=>`<div class="admin-item"><b>${esc(x.name)}</b> — ${esc(x.phone)}<br><button class="btn white" onclick='banUser(${JSON.stringify(x.phone)},"Клиент")'>🚫 Бан</button></div>`).join(""):'<div class="empty">Клиент жоқ.</div>'}`;}
+  if(t==="banned") c.innerHTML=`<h3>🚫 Бан тізімі</h3>${b.length?b.map((x,i)=>`<div class="admin-item"><b>${esc(x.phone)}</b> — ${esc(x.type||"")}<br><small>${esc(x.reason||"Админ шешімі")}</small><br><button class="btn white" onclick="unbanUser(${i})">♻️ Баннан шығару</button></div>`).join(""):'<div class="empty">Бан тізімі бос.</div>'}`;
+  if(t==="reports"){const r=readJSON("ustatap_reports",[]);c.innerHTML=`<h3>⚠️ Шағымдар / Спам</h3>${r.length?r.slice().reverse().map((x,i)=>`<div class="admin-item"><b>${esc(x.name)}</b> — ${esc(x.phone)}<br>Себеп: ${esc(x.reason)}<br><small>${esc(x.date||"")}</small><br><button class="btn danger" onclick='adminBanReport(${JSON.stringify(x.phone)},${JSON.stringify(x.name)})'>🚫 Банға жіберу</button> <button class="btn white" onclick="deleteReport(${r.length-1-i})">🗑️ Өшіру</button></div>`).join(""):'<div class="empty">Шағым жоқ.</div>'}`;}
+}
+
+async function adminSetOrderStatus(id){
+  const o=dbOrders.find(x=>String(x.id)===String(id)); if(!o)return;
+  const s=prompt("Статус: new / in_progress / completed",o.status||"new");
+  if(!s||!["new","active","in_progress","completed"].includes(s))return;
+  const {error}=await ustadb.from("orders").update({status:s}).eq("id",id);
+  if(error){alert("❌ Қате: "+error.message);return}
+  await refreshOrders(); renderOrders(); renderAdmin();
+}
+
+async function adminDeleteOrder(id){
+  if(!confirm("Хабарламаны өшіру керек пе?")) return;
+  const {error}=await ustadb.from("orders").delete().eq("id",id);
+  if(error){alert("❌ Қате: "+error.message);return}
+  await refreshOrders(); renderOrders(); renderAdmin();
+}
+
+async function adminDeleteMaster(i){
+  const m=masters[i]; if(!m||!confirm("Маманды өшіру керек пе?"))return;
+  const {error}=await ustadb.from("masters").delete().eq("id",m.id);
+  if(error){alert("❌ Қате: "+error.message);return}
+  await refreshMasters(); await refreshReviews(); render(); renderAdmin();
+}
+
+async function toggleVerified(i){
+  const m=masters[i]; if(!m)return;
+  const {error}=await ustadb.from("masters").update({verified:!m.verified,blocked:false}).eq("id",m.id);
+  if(error){alert("❌ Қате: "+error.message);return}
+  await refreshMasters(); render(); renderAdmin();
+}
+
+async function toggleMasterStatus(i){
+  const m=masters[i]; if(!m)return;
+  const next=!m.blocked;
+  const {error}=await ustadb.from("masters").update({blocked:next}).eq("id",m.id);
+  if(error){alert("❌ Қате: "+error.message);return}
+  await refreshMasters(); render(); renderAdmin();
+}
+
+async function banUser(phone,type){
+  if(dbBanned.some(x=>x.phone===phone)){alert("Бұл нөмір бан тізімінде бар.");return}
+  let result=await ustadb.from("banned_users").insert({phone,type,reason:"Админ шешімі"});
+  if(result.error){
+    result=await ustadb.from("banned_users").insert({phone,reason:"Админ шешімі"});
+  }
+  if(result.error){
+    result=await ustadb.from("banned_users").insert({phone});
+  }
+  if(result.error){alert("❌ Банға қосу қатесі: "+result.error.message);return}
+  await refreshBanned(); alert("🚫 Банға жіберілді"); renderAdmin();
+}
+
+async function unbanUser(i){
+  const x=dbBanned[i]; if(!x)return;
+  let q=ustadb.from("banned_users").delete();
+  const {error}=x.id ? await q.eq("id",x.id) : await q.eq("phone",x.phone);
+  if(error){alert("❌ Қате: "+error.message);return}
+  await refreshBanned(); renderAdmin();
+}
+
+function adminBanReport(phone,name){banUser(phone,"Шағым бойынша");}
+
+window.addEventListener("load", loadSupabaseData);
+</script>
+
+</body></html>
